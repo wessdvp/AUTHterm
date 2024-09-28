@@ -30,15 +30,18 @@ if ! command -v virtualenv &> /dev/null; then
     pip3 install --root-user-action=ignore virtualenv
 fi
 
+# Get the directory of the current script
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+
 # Create a virtual environment if it doesn't exist
-if [ ! -d "venv" ]; then
+if [ ! -d "$SCRIPT_DIR/venv" ]; then
     echo "Creating a virtual environment..."
-    python3 -m venv venv
+    python3 -m venv "$SCRIPT_DIR/venv"
 fi
 
 # Activate the virtual environment
 echo "Activating the virtual environment..."
-source venv/bin/activate || { echo "Failed to activate virtual environment."; exit 1; }
+source "$SCRIPT_DIR/venv/bin/activate" || { echo "Failed to activate virtual environment."; exit 1; }
 
 # Install required Python packages
 echo "Installing necessary Python packages..."
@@ -48,12 +51,11 @@ pip install --root-user-action=ignore pyotp
 echo "Creating executable script for authterm..."
 cat << EOF > /usr/local/bin/authterm
 #!/bin/bash
-source "$(dirname "\$0")/venv/bin/activate"
-exec python3 "$(dirname "\$0")/src/authenticator.py"
+source "$SCRIPT_DIR/venv/bin/activate"  # Path to your virtual environment
+exec python3 "$SCRIPT_DIR/src/authenticator.py"  # Path to your script
 EOF
 
 # Make the script executable
 chmod +x /usr/local/bin/authterm
 
 echo -e "\nInstallation complete! Use 'authterm' to run your app."
-
