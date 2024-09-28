@@ -59,7 +59,6 @@ def setup_password(stdscr):
     stdscr.getch()
     curses.echo()  # Turn on echoing again (show cursor)
 
-
 # Function to verify password
 def verify_password(stdscr):
     stdscr.clear()
@@ -78,6 +77,7 @@ def verify_password(stdscr):
         stdscr.getch()
         exit()
 
+# splash screen
 def splash_screen(stdscr):
     stdscr.clear()
     h, w = stdscr.getmaxyx()
@@ -146,9 +146,8 @@ def main_menu(stdscr):
             elif selected_option == 7:
                 exit_app(stdscr)
     curses.curs_set(1)
-# Function to change password
-import curses
 
+# Function to change password
 def change_password(stdscr):
     global password_hash  # Declare as global at the start
     stdscr.clear()
@@ -200,9 +199,6 @@ def change_password(stdscr):
 
     stdscr.refresh()
     stdscr.getch()
-
-       
-
 
 # Function for the "About" section
 def about(stdscr):
@@ -264,11 +260,12 @@ def help_menu(stdscr):
         elif key == 10:  # Enter key
             break  # Exit the help menu
 
+#ft to check base32
 def is_base32(secret_value):
     base32_regex = r'^[A-Z2-7]+=*$'  # Regex to match Base32 encoding
     return bool(re.match(base32_regex, secret_value))
 
-
+# Function to create a secret
 def create_secret(stdscr):
     global secrets  # Assuming secrets is defined somewhere globally
     stdscr.clear()
@@ -342,10 +339,7 @@ def create_secret(stdscr):
     stdscr.refresh()
     stdscr.getch()
 
-
 # Function to edit a secret
-
-
 def edit_secret(stdscr):
     stdscr.clear()
     h, w = stdscr.getmaxyx()
@@ -441,10 +435,6 @@ def edit_secret(stdscr):
 
     stdscr.clear()  # Clear the screen before returning
 
-
-
-
-
 # Function to delete a secret
 def delete_secret(stdscr):
     stdscr.clear()
@@ -498,8 +488,6 @@ def delete_secret(stdscr):
         elif key == ord ('x') or ord('X'):  # Check for 'x' key to exit
             break  # Exit the loop if 'x' is pressed
 
-
-
 # Function to list and view secrets
 def list_secrets(stdscr):
     while True:
@@ -542,11 +530,13 @@ def list_secrets(stdscr):
             elif key == ord ('x') or ord('X'):
                 return  # Exit listing and return to the main menu
 
+# generate code ft
 def generate_code(secret):
     """Generate a 6-digit numerical TOTP code."""
     totp = pyotp.TOTP(secret)
     return totp.now()  # Get current TOTP code
 
+# timer gui ft
 def draw_timer(stdscr, secret):
     # Clear the screen
     stdscr.clear()
@@ -597,7 +587,7 @@ def draw_timer(stdscr, secret):
             start_time = current_time  # Reset start time
             next_code_time = (start_time + duration) // duration * duration  # Reset next code time to the next 30s boundary
 
-
+# show code ft
 def show_code(stdscr, secret_name):
     stdscr.clear()
     h, w = stdscr.getmaxyx()
